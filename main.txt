@@ -1,0 +1,102 @@
+<style type="text/css">
+    .wrap {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .catalog{
+        flex: 1 0 70%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .cell {
+        padding: 15px;
+        flex: 0 0 calc( 16% - 30px );
+        min-width: 200px;
+        width: 200px;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .cell_inside {
+        /* background-color: yellow; */
+        flex: 1;
+        padding: 15px;
+        min-height: 140px;
+    }
+
+    .cell_inside a {
+        text-decoration: none;
+    }
+
+    .img {
+        border-radius: 10px;
+        width: 100%;
+    }
+
+    .car_all_info span {
+        display: block;
+        color:black;
+        padding-top: 8px;
+        font-size: 15px;
+    }
+
+    .car_all_info .car_name {
+        line-height: 21px;
+        font-size: 15px;
+        transition: color 0.2s;
+    }
+
+    .car_all_info span.car_info {
+        color:grey;
+    }
+
+    .car_all_info span.car_price {
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 21px;
+    }
+
+    .cell_inside:hover .car_name {
+        color:#db3727;
+    }
+</style>
+
+<div class="wrap">
+    <div class="catalog" id="car_catalog">
+    </div>
+</div>
+
+<script type="text/javascript">
+const catalog = document.querySelector('#car_catalog');
+
+$.ajax({
+    method: "GET",
+    url: "https://u1550497.cp.regruhosting.ru/api/v1/get_cars/",
+    success: (data) => {
+        const cars = data;
+
+        cars.map(car => {
+            let carNode = document.createElement('div');
+            carNode.className = 'cell';
+            carNode.innerHTML = `
+            <div class="cell_inside">
+                <a href="${car.car_url}" target="_blank">
+                    <img class="img" src="${car.car_main_img}"/>
+                    <div class="car_all_info">
+                        <span class="car_name">${car.car_name}</span>
+                        <span class="car_info">${car.car_year}, ${car.car_run} км</span>
+                        <span class="car_price">${car.car_price} <b>₽</b></span>
+                    </div>
+                </a>
+            </div>
+            `;
+            catalog.appendChild(carNode);
+        });
+    }
+});
+</script>
